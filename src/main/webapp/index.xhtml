@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: edsonfacioli
+  Date: 14/06/2023
+  Time: 15:56
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>CRUD Cadastro Cliente</title>
+</h:head>
+
+<h:body>
+
+    <ui:include src="Cadastrar.xhtml" />
+    <ui:include src="Editar.xhtml" />
+    <ui:include src="Excluir.xhtml" />
+
+    <h:form prependId="false" id="listagem">
+        <p:growl showDetail="true" life="10000" />
+        <p:commandButton value="Adicionar" oncomplete="PF('cadastrar').show()" />
+        <h:panelGroup id="lista">
+            <p:dataTable
+                emptyMessage="Nenhum registro!"
+                paginator="#{cliente.clientesList.size() > 10}"
+                value="#{cliente.clientesList.entrySet().toArray()}"
+                var="registro">
+
+                <p:column headerText="Nome">
+                    <h:outputText value="#{registro.value.nome}" />
+                </p:column>
+
+                <p:column headerText="E-mail">
+                    <h:outputText value="#{registro.value.email}" />
+                </p:column>
+
+                <p:column headerText="Telefone">
+                    <h:outputText value="#{registro.value.telefone}" />
+                </p:column>
+
+                <p:column headerText="Açoes">
+                    <p:commandButton value="Editar"
+                                     action="#{cliente.selecionado(registro.key)}"
+                                     style="font: 12px Arial; margin-right: 10px"
+                                     oncomplete="PF('editar').show()"
+                                     update="editar"/>
+                    <p:commandButton value="Excluir"
+                                     style="font: 12px Arial;"
+                                     oncomplete="PF('excluir').show()"
+                                     update="excluir"
+                                     action="#{cliente.selecionado(registro.key)}" />
+                </p:column>
+            </p:dataTable>
+        </h:panelGroup>
+    </h:form>
+
+
+</h:body>
+
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: edsonfacioli
+  Date: 14/06/2023
+  Time: 16:21
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Editar Cliente</title>
+</h:head>
+
+<h:body>
+    <p:dialog id="editar" widgetVar="editar" width="600" height="180" modal="true" resizable="false" header="Editar">
+        <p:ajax event="close" listener="#{cliente.limpar()}" />
+        <h:form prependId="false">
+            <p:growl showDetail="true" life="10000" />
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: column; font: 14px Arial; margin-bottom: 5px">
+                    <h:outputLabel value="Nome: " />
+                    <h:inputText
+                            required="true"
+                            requiredMessage="Campo 'Nome' deve ser preenchido"
+                            value="#{cliente.cliente.nome}"
+                            style="font: 12px Arial; margin-bottom: 5px"/>
+                </div>
+                <div style="display: flex; flex-direction: column; font: 14px Arial">
+                    <h:outputLabel value="E-mail:" />
+                    <h:inputText
+                            required="true"
+                            requiredMessage="Campo 'E-mail' deve ser preenchido"
+                            value="#{cliente.cliente.email}"
+                            style="font: 12px Arial; margin-bottom: 5px" />
+                </div>
+                <div style="display: flex; flex-direction: column; font: 14px Arial; margin-bottom: 5px">
+                    <h:outputLabel value="Telefone:" />
+                    <p:inputMask
+                            required="true"
+                            requiredMessage="Campo 'Telefone deve' ser preenchido"
+                            mask="(99)99999-9999"
+                            style="font: 12px Arial"
+                            value="#{cliente.cliente.telefone}" />
+                </div>
+                <p:commandButton value="Salvar" action="#{cliente.atualizar(cliente.id)}" update="lista, @form" />
+            </div>
+        </h:form>
+    </p:dialog>
+</h:body>
+
+</html>

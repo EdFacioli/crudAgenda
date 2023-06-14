@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: edsonfacioli
+  Date: 14/06/2023
+  Time: 16:31
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Editar Cliente</title>
+</h:head>
+
+<h:body>
+    <p:dialog id="excluir" widgetVar="excluir" width="600" height="55" modal="true" resizable="false" header="Excluir">
+        <h:form>
+            <div>
+                <div style="display:flex; justify-content: center">
+                    <h:outputText value="Deseja excluir o contato?" />
+                </div>
+                <div style="float: right">
+                    <p:commandButton value="Sim"
+                                     oncomplete="PF('excluir').hide()"
+                                     style="font: 12px Arial; margin-right: 10px"
+                                     action="#{cliente.excluir(cliente.id)}" update="lista,@form" />
+                    <p:commandButton value="Nao"
+                                     style="font: 12px Arial"
+                                     oncomplete="PF('excluir').hide()"
+                                     update="lista, @form" />
+                </div>
+            </div>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>

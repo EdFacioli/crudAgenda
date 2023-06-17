@@ -1,8 +1,8 @@
 package br.com.desstecnologia.desstecnologia.bean;
 
+import br.com.desstecnologia.desstecnologia.Dao.ClienteDao;
 import br.com.desstecnologia.desstecnologia.model.Clientes;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -11,38 +11,39 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 @Named("cliente")
-@SessionScoped
+@ViewScoped
 public class ClienteBean implements Serializable {
 
+    ClienteDao clienteDao = ClienteDao.getInstance();
     private HashMap<Integer, Clientes> clientesList;
     private Clientes cliente;
-
-    private Integer key = 1;
-
-    private String msg;
-
     private Integer id;
 
     public void salvar() {
-        clientesList.put(key, cliente);
-        key++;
+        clienteDao.save(cliente);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Salvo com sucesso!"));
-        msg = "Salvo com sucesso!";
+        clientesList = clienteDao.findAll();
         limpar();
     }
 
     public void excluir(Integer id) {
-        clientesList.remove(id);
+        clienteDao.delete(id);
+        clientesList = clienteDao.findAll();
     }
 
     public void atualizar(Integer id) {
-        clientesList.put(id, cliente);
+        clienteDao.merge(id, cliente);
+        clientesList = clienteDao.findAll();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Atualizado com sucesso!"));
     }
 
     public void selecionado(Integer id) {
         this.id = id;
-        this.cliente = getClientesList().get(id);
+        this.cliente = clienteDao.findById(id);
+    }
+
+    public void carregarDados() {
+        clientesList = clienteDao.findAll();
     }
 
     public void limpar() {
@@ -67,15 +68,11 @@ public class ClienteBean implements Serializable {
         return cliente;
     }
 
-    public void setCliente(Clientes cliente) {
-        this.cliente = cliente;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
     public Integer getId() {
         return id;
+    }
+
+    public void setCliente(Clientes cliente) {
+        this.cliente = cliente;
     }
 }

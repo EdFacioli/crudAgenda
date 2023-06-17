@@ -20,7 +20,7 @@
 <h:body>
     <p:dialog id="cadastrar" widgetVar="cadastrar" width="600" height="180" modal="true" resizable="false" header="Cadastrar">
         <p:ajax event="close" listener="#{cliente.limpar()}" />
-        <h:form prependId="false">
+        <h:form prependId="false" id="cadastrarForm">
             <p:growl showDetail="true" life="10000" />
             <div style="display: flex; flex-direction: column;">
                 <div style="display: flex; flex-direction: column; font: 14px Arial; margin-bottom: 5px">

@@ -11,33 +11,40 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
     <title>Editar Cliente</title>
+    <h:outputStylesheet library="webjars" name="font-awesome/6.4.0/css/all.min-jsf.css" />
 </h:head>
 
 <h:body>
-    <p:dialog id="cadastrar" widgetVar="cadastrar" width="600" height="180" modal="true" resizable="false" header="Cadastrar">
+    <p:dialog id="cadastrar" widgetVar="cadastrar" width="600" height="205" modal="true" resizable="false" header="Cadastrar">
         <p:ajax event="close" listener="#{cliente.limpar()}" />
         <h:form prependId="false" id="cadastrarForm">
             <p:growl showDetail="true" life="10000" />
             <div style="display: flex; flex-direction: column;">
                 <div style="display: flex; flex-direction: column; font: 14px Arial; margin-bottom: 5px">
                     <h:outputLabel value="Nome: " />
-                    <h:inputText
+                    <p:inputText
                             required="true"
                             requiredMessage="Campo 'Nome' deve ser preenchido"
                             value="#{cliente.cliente.nome}"
+                            placeholder="nome"
                             style="font: 12px Arial; margin-bottom: 5px"/>
                 </div>
                 <div style="display: flex; flex-direction: column; font: 14px Arial">
                     <h:outputLabel value="E-mail:" />
-                    <h:inputText
+                    <p:inputText
                             required="true"
                             requiredMessage="Campo 'E-mail' deve ser preenchido"
+                            validatorMessage="Não é um e-mail válido"
                             value="#{cliente.cliente.email}"
-                            style="font: 12px Arial; margin-bottom: 5px" />
+                            placeholder="email@email.com"
+                            style="font: 12px Arial; margin-bottom: 5px">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
                 </div>
                 <div style="display: flex; flex-direction: column; font: 14px Arial; margin-bottom: 5px">
                     <h:outputLabel value="Telefone:" />

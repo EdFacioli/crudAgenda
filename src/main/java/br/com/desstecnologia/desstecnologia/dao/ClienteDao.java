@@ -15,18 +15,18 @@ public class ClienteDao {
         clientesStore = new HashMap<>();
     }
 
-    public Clientes save(Clientes cliente) {
-        key++;
-        clientesStore.put(key, cliente);
+    public Clientes save(Integer id, Clientes cliente) {
+        if (id != null && id > 0) {
+            clientesStore.replace(id, cliente);
+        } else {
+            key++;
+            clientesStore.put(key, cliente);
+        }
         return clientesStore.get(key);
     }
 
     public Clientes delete(Integer id) {
         return clientesStore.remove(id);
-    }
-
-    public Clientes update(Integer id, Clientes cliente) {
-        return clientesStore.replace(id, cliente);
     }
 
     public Clientes findById(Integer id) {

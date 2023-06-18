@@ -17,23 +17,23 @@
 
 <h:head>
     <title>CRUD Cadastro Cliente</title>
+    <h:outputStylesheet library="webjars" name="font-awesome/6.4.0/css/all.min-jsf.css" />
 </h:head>
 
 <h:body>
 
     <ui:include src="Cadastrar.xhtml" />
     <ui:include src="Editar.xhtml" />
-    <ui:include src="Excluir.xhtml" />
 
     <h:form prependId="false" id="listagem">
         <p:growl showDetail="true" life="10000" />
-        <p:commandButton value="Adicionar" oncomplete="PF('cadastrar').show()" />
+        <p:commandButton value="Adicionar" icon="pi pi-plus" styleClass="ui-button-success" oncomplete="PF('cadastrar').show()" />
         <f:event type="preRenderView" listener="#{cliente.carregarDados()}" />
         <h:panelGroup id="lista">
             <p:dataTable
                 emptyMessage="Nenhum registro!"
-                paginator="#{cliente.clientesList.size() > 10}"
-                value="#{cliente.clientesList.entrySet().toArray()}"
+                paginator="#{cliente.clientesStore.size() > 10}"
+                value="#{cliente.clientesStore.entrySet().toArray()}"
                 var="registro">
 
                 <p:column headerText="Nome">
@@ -49,19 +49,27 @@
                 </p:column>
 
                 <p:column headerText="Açoes">
-                    <p:commandButton value="Editar"
+                    <p:commandButton icon="pi pi-pencil"
+                                     styleClass="edit-button rounded-button ui-button-success"
+                                     process="@this"
                                      action="#{cliente.selecionado(registro.key)}"
-                                     style="font: 12px Arial; margin-right: 10px"
                                      oncomplete="PF('editar').show()"
                                      update="editar"/>
-                    <p:commandButton value="Excluir"
-                                     style="font: 12px Arial;"
-                                     oncomplete="PF('excluir').show()"
-                                     update="excluir"
-                                     action="#{cliente.selecionado(registro.key)}" />
+                    <p:commandButton icon="pi pi-trash"
+                                     styleClass="ui-button-warning rounded-button"
+                                     action="#{cliente.excluir(registro.key)}" update="lista" >
+                        <p:confirm header="Confirmação!" message="Excluir o registro?"
+                                   icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
         </h:panelGroup>
+
+        <p:confirmDialog global="true" showEffect="fade" width="300">
+            <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                             icon="pi pi-times" />
+        </p:confirmDialog>
     </h:form>
 
 

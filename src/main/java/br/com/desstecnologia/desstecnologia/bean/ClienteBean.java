@@ -2,8 +2,10 @@ package br.com.desstecnologia.desstecnologia.bean;
 
 import br.com.desstecnologia.desstecnologia.dao.ClienteDao;
 import br.com.desstecnologia.desstecnologia.model.Clientes;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -17,14 +19,16 @@ public class ClienteBean implements Serializable {
     ClienteDao clienteDao = ClienteDao.getInstance();
     private HashMap<Integer, Clientes> clientesStore;
     private Clientes cliente;
-    private Integer id;
+    private Integer id = 0;
 
-    public void salvar() {
-        if (clienteDao.save(cliente) != null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Salvo com sucesso!"));
+    private boolean editar;
+
+    public void salvar(Integer id) {
+        if (clienteDao.save(id, cliente) != null) {
+            this.msgDialog(FacesMessage.SEVERITY_INFO, "Salvo com sucesso!");
             clientesStore = clienteDao.findAll();
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Não pode ser salvo!"));
+            this.msgDialog(FacesMessage.SEVERITY_ERROR, "Não pode ser salvo!");
         }
         limpar();
     }
@@ -33,26 +37,26 @@ public class ClienteBean implements Serializable {
         if (clienteDao.delete(id) != null) {
             clientesStore = clienteDao.findAll();
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Não pode ser excluído!"));
-        }
-    }
-
-    public void atualizar(Integer id) {
-        if (clienteDao.update(id, cliente) != null) {
-            clientesStore = clienteDao.findAll();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Atualizado com sucesso!"));
-            limpar();
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Não pode ser atualizado!"));
+            this.msgDialog(FacesMessage.SEVERITY_ERROR, "Não pode ser excluído!");
         }
     }
 
     public void selecionado(Integer id) {
-        this.id = id;
-        this.cliente = clienteDao.findById(id);
-        if (this.cliente == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Não existe o registro!"));
+        if (id > 0) {
+            this.id = id;
+            this.cliente = clienteDao.findById(id);
+            if (this.cliente == null) {
+                this.msgDialog(FacesMessage.SEVERITY_ERROR, "Não existe o registro para o id informado!");
+            }
+            this.editar = true;
+        } else {
+            this.cliente = new Clientes();
+            this.editar = false;
         }
+    }
+
+    private void msgDialog(Severity severity, String msg) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, "", msg));
     }
 
     public void carregarDados() {
@@ -60,6 +64,7 @@ public class ClienteBean implements Serializable {
     }
 
     public void limpar() {
+        id = 0;
         cliente = null;
     }
 
@@ -87,5 +92,9 @@ public class ClienteBean implements Serializable {
 
     public void setCliente(Clientes cliente) {
         this.cliente = cliente;
+    }
+
+    public boolean isEditar() {
+        return editar;
     }
 }

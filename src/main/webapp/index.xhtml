@@ -22,17 +22,23 @@
 
 <h:body>
 
-    <ui:include src="Cadastrar.xhtml" />
-    <ui:include src="Editar.xhtml" />
+    <ui:include src="ContatoDetalhes.xhtml" />
 
     <h:form prependId="false" id="listagem">
         <p:growl showDetail="true" life="10000" />
-        <p:commandButton value="Adicionar" icon="pi pi-plus" styleClass="ui-button-success" oncomplete="PF('cadastrar').show()" />
+        <p:commandButton value="Adicionar"
+                         icon="pi pi-plus"
+                         styleClass="ui-button-success"
+                         action="#{cliente.selecionado(0)}"
+                         oncomplete="PF('contatoDetalhes').show()"
+                         update="contatoDetalhes"/>
         <f:event type="preRenderView" listener="#{cliente.carregarDados()}" />
         <h:panelGroup id="lista">
             <p:dataTable
                 emptyMessage="Nenhum registro!"
-                paginator="#{cliente.clientesStore.size() > 10}"
+                rows="10"
+                paginator="true"
+                paginatorPosition="bottom"
                 value="#{cliente.clientesStore.entrySet().toArray()}"
                 var="registro">
 
@@ -53,8 +59,8 @@
                                      styleClass="edit-button rounded-button ui-button-success"
                                      process="@this"
                                      action="#{cliente.selecionado(registro.key)}"
-                                     oncomplete="PF('editar').show()"
-                                     update="editar"/>
+                                     oncomplete="PF('contatoDetalhes').show()"
+                                     update="contatoDetalhes"/>
                     <p:commandButton icon="pi pi-trash"
                                      styleClass="ui-button-warning rounded-button"
                                      action="#{cliente.excluir(registro.key)}" update="lista" >

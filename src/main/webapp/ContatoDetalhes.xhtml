@@ -15,14 +15,13 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
-    <title>Editar Cliente</title>
     <h:outputStylesheet library="webjars" name="font-awesome/6.4.0/css/all.min-jsf.css" />
 </h:head>
 
 <h:body>
-    <p:dialog id="cadastrar" widgetVar="cadastrar" width="600" height="205" modal="true" resizable="false" header="Cadastrar">
+    <p:dialog id="contatoDetalhes" widgetVar="contatoDetalhes" width="600" height="205" modal="true" resizable="false" header="Contato - #{cliente.editar ? 'Editar' : 'Cadastrar'}">
         <p:ajax event="close" listener="#{cliente.limpar()}" />
-        <h:form prependId="false" id="cadastrarForm">
+        <h:form prependId="false" id="contatoDetalhesForm">
             <p:growl showDetail="true" life="10000" />
             <div style="display: flex; flex-direction: column;">
                 <div style="display: flex; flex-direction: column; font: 14px Arial; margin-bottom: 5px">
@@ -55,7 +54,10 @@
                             style="font: 12px Arial"
                             value="#{cliente.cliente.telefone}" />
                 </div>
-                <p:commandButton value="Salvar" action="#{cliente.salvar()}" update="lista, @form" />
+                <p:commandButton value="Salvar"
+                                 action="#{cliente.salvar(cliente.id)}"
+                                 update="lista, @form"
+                                 oncomplete="#{cliente.editar ? 'PF(\'contatoDetalhes\').hide()' : ''}" />
             </div>
         </h:form>
     </p:dialog>
